@@ -1,0 +1,16 @@
+---
+/** Bloc de page enrichie `rdv` : valeurs enregistrées → encart (champ vide = texte de `encart:`). */
+import type { Bloc } from '@cms/lib/blocs';
+import RdvCtaSection from './RdvCtaSection.astro';
+
+interface Props {
+	bloc: Bloc;
+}
+
+const { bloc } = Astro.props;
+const champ = (nom: string) => (typeof bloc[nom] === 'string' ? (bloc[nom] as string) : '') || undefined;
+---
+
+<div class="mt-8">
+	<RdvCtaSection title={champ('titre')} description={champ('texte')} />
+</div>

@@ -1,0 +1,62 @@
+{
+	"id": "rdv",
+	"label": "Prise de rendez-vous",
+	"description": "Prise de rendez-vous en ligne avec un·e conseiller·ère (document Grist) : page publique, permanences dans le planning, encart d’accueil et bloc de page, module « Rendez-vous » de l’Espace Admin (réglages : src/content/rdv.yaml).",
+	"version": "1.0.0",
+	"cms": "0.5.20",
+	"auteur": "OpenPixl",
+	"icon": "fa-calendar-check",
+	"doc": "extensions/rdv/README.md",
+	"requis": [
+		{ "fichier": "rdv.yaml", "aide": "Copier le modèle extensions/rdv/rdv.exemple.yaml dans src/content/rdv.yaml puis l’adapter (adresse, textes, permanences)." }
+	],
+	"modele": { "fichier": "rdv.yaml", "source": "rdv.exemple.yaml" },
+	"env": [
+		{
+			"nom": "GRIST_API_KEY_RDV",
+			"repli": "GRIST_API_KEY",
+			"aide": "Clé d’API Grist, dans le .env : GRIST_API_KEY_RDV (clé limitée au document des RDV, conseillé) ou, à défaut, GRIST_API_KEY. Sans clé, aucun RDV ne peut être pris."
+		}
+	],
+	"reglages": {
+		"fichier": "rdv.yaml",
+		"champs": [
+			{
+				"cle": "adresse",
+				"label": "Adresse de la page",
+				"groupe": "Page publique",
+				"type": "adresse",
+				"defaut": "/rendez-vous",
+				"aide": "Les liens déjà écrits vers l’ancienne adresse (actualités, pages) ne sont pas modifiés."
+			},
+			{
+				"cle": "grist.url",
+				"label": "Adresse de l’instance Grist",
+				"groupe": "Document Grist",
+				"type": "url",
+				"env": "GRIST_BASE_URL",
+				"obligatoire": true,
+				"aide": "Ex. https://grist.exemple.fr — vide : celle du .env, partagée avec le CMS."
+			},
+			{
+				"cle": "grist.document",
+				"label": "Identifiant du document",
+				"groupe": "Document Grist",
+				"type": "identifiant",
+				"env": "GRIST_DOC_ID_RDV",
+				"obligatoire": true,
+				"aide": "Dans l’adresse du document Grist : https://…/o/…/<identifiant>/…"
+			},
+			{ "cle": "grist.tables.beneficiaires", "label": "Table des bénéficiaires", "groupe": "Document Grist", "type": "table", "env": "GRIST_TABLE_BENEFICIAIRES", "defaut": "Beneficiaires" },
+			{ "cle": "grist.tables.rdv", "label": "Table des rendez-vous", "groupe": "Document Grist", "type": "table", "env": "GRIST_TABLE_RDV", "defaut": "RDV" },
+			{ "cle": "grist.tables.demarches", "label": "Table des démarches", "groupe": "Document Grist", "type": "table", "env": "GRIST_TABLE_DEMARCHES", "defaut": "Demarches" }
+		]
+	},
+	"gardes": [
+		{
+			"prefixe": "/api/admin/rdv",
+			"groupes": ["animateur"],
+			"message": "La gestion des rendez-vous est réservée au bureau et aux animateur·rice·s."
+		}
+	]
+}

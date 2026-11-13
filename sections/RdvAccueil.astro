@@ -1,0 +1,12 @@
+---
+/** Module d'accueil `rdv` : champs du module (variables déjà remplacées par le CMS) → encart. */
+import RdvCtaSection from './RdvCtaSection.astro';
+
+interface Props {
+	champs: Record<string, string>;
+}
+
+const { champs } = Astro.props;
+---
+
+<RdvCtaSection eyebrow={champs.surtitre} title={champs.titre} description={champs.texte} buttonLabel={champs['bouton-texte']} />

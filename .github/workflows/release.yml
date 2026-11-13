@@ -1,0 +1,24 @@
+# Tag vX.Y.Z (= "version" d'extension.json) → archive installable
+# zerucms-rdv-X.Y.Z.zip jointe à une Release GitHub.
+name: Publication d'une version
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Version du tag = version d'extension.json
+        run: |
+          version=$(sed -nE 's/^[[:space:]]*"version":[[:space:]]*"([^"]+)".*/\1/p' extension.json | head -1)
+          [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "Tag $GITHUB_REF_NAME ≠ version $version d'extension.json"; exit 1; }
+      - name: Archive
+        id: archive
+        run: echo "fichier=$(./archive.sh)" >> "$GITHUB_OUTPUT"
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" "${{ steps.archive.outputs.fichier }}" --title "$GITHUB_REF_NAME" --notes "Archive à installer depuis le module « Extensions » de l'Espace Admin (ou npm run extension -- install)."
