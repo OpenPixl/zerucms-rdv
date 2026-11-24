@@ -393,6 +393,24 @@ const lienIcs = computed(() => {
 
 const qrCodeSvg = ref('');
 
+// --- « M'envoyer le détail par e-mail » : sur demande, avec le jeton remis par /api/rdv/prendre ---
+const jetonEmail = ref('');
+const etatEmail = ref<'pret' | 'envoi' | 'envoye' | 'erreur'>('pret');
+const messageEmail = ref('');
+
+async function envoyerDetailEmail() {
+	if (!jetonEmail.value || etatEmail.value === 'envoi') return;
+	etatEmail.value = 'envoi';
+	try {
+		const { a } = await rdvApi.envoyerDetail(jetonEmail.value);
+		messageEmail.value = `Le détail de votre rendez-vous a été envoyé à ${a}.`;
+		etatEmail.value = 'envoye';
+	} catch (err) {
+		messageEmail.value = err instanceof Error ? err.message : 'L’e-mail n’a pas pu être envoyé.';
+		etatEmail.value = 'erreur';
+	}
+}
+
 async function genererQrCode() {
 	if (!evenementCourant.value) return;
 	try {
@@ -504,6 +522,7 @@ async function envoyer() {
 			etatEnvoi.value = 'erreur';
 			return;
 		}
+		jetonEmail.value = res.status === 'ok' ? (res.jetonEmail ?? '') : '';
 		etatEnvoi.value = 'ok';
 		genererQrCode();
 	} catch (err) {
@@ -569,6 +588,28 @@ async function envoyer() {
 				>
 					<i class="fa-solid fa-calendar-plus" aria-hidden="true"></i>Ajouter à mon agenda
 				</a>
+			</div>
+
+			<div v-if="jetonEmail" class="mt-4 text-center">
+				<button
+					v-if="etatEmail !== 'envoye'"
+					type="button"
+					class="bouton bouton-contour"
+					:disabled="etatEmail === 'envoi'"
+					@click="envoyerDetailEmail"
+				>
+					<i class="fa-solid" :class="etatEmail === 'envoi' ? 'fa-spinner fa-spin' : 'fa-envelope'" aria-hidden="true"></i
+					>M’envoyer le détail par e-mail
+				</button>
+				<p v-if="etatEmail === 'pret'" class="mt-1 text-xs text-gray-500">À l’adresse {{ form.email.trim() }}</p>
+				<p
+					v-if="messageEmail"
+					role="status"
+					class="mt-2 text-sm"
+					:class="etatEmail === 'envoye' ? 'text-green-700' : 'text-red-700'"
+				>
+					<i v-if="etatEmail === 'envoye'" class="fa-solid fa-circle-check mr-1" aria-hidden="true"></i>{{ messageEmail }}
+				</p>
 			</div>
 
 			<div v-if="qrCodeSvg" class="mt-6 hidden items-center gap-5 rounded-lg border border-gray-100 p-4 sm:flex">

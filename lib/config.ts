@@ -115,6 +115,8 @@ const DEFAUTS = {
 	zones: [] as z.infer<typeof zoneSchema>[],
 	/** Document Grist : vide = variables du `.env` (`lib/grist.ts`). La clé d'API reste dans le `.env`. */
 	grist: {} as { url?: string; document?: string; tables?: { beneficiaires?: string; rdv?: string; demarches?: string } },
+	/** Adresse prévenue par e-mail à chaque RDV pris en ligne (vide = personne). */
+	notification: {} as { email?: string },
 };
 
 const formatChamp = (type: keyof typeof FORMATS) =>
@@ -171,6 +173,7 @@ const schema = z
 			document: formatChamp('identifiant'),
 			tables: partiel({ beneficiaires: formatChamp('table'), rdv: formatChamp('table'), demarches: formatChamp('table') }),
 		}),
+		notification: partiel({ email: formatChamp('email') }),
 	})
 	.partial()
 	.nullish()
@@ -207,6 +210,7 @@ export function parseRdvConfig(text: string | undefined) {
 		permanences: (o.permanences ?? DEFAUTS.permanences).toSorted((a, b) => AGENDA_DAYS.indexOf(a.day) - AGENDA_DAYS.indexOf(b.day)),
 		zones: o.zones ?? DEFAUTS.zones,
 		grist: { ...o.grist, tables: { ...o.grist?.tables } },
+		notification: { ...DEFAUTS.notification, ...o.notification },
 	};
 }
 

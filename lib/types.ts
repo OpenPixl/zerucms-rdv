@@ -101,7 +101,8 @@ export interface PriseRdvPayload extends BeneficiaireInfos {
 }
 
 export type PriseRdvResult =
-	| { status: 'ok'; rdvId: number }
+	/** `jetonEmail` : présent si un e-mail a été saisi et que le site sait envoyer des e-mails. */
+	| { status: 'ok'; rdvId: number; jetonEmail?: string }
 	| { status: 'complet' }
 	| { status: 'demarches_invalides' }
 	| { status: 'beneficiaire_inconnu' };

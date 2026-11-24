@@ -35,6 +35,7 @@ export default {
 		{ pattern: '/api/rdv/commune', entrypoint: 'api/commune.ts' },
 		{ pattern: '/api/rdv/creneaux', entrypoint: 'api/creneaux.ts' },
 		{ pattern: '/api/rdv/demarches', entrypoint: 'api/demarches.ts' },
+		{ pattern: '/api/rdv/email', entrypoint: 'api/email.ts' },
 		{ pattern: '/api/rdv/ics', entrypoint: 'api/ics.ts' },
 		{ pattern: '/api/rdv/listes', entrypoint: 'api/listes.ts' },
 		{ pattern: '/api/rdv/prendre', entrypoint: 'api/prendre.ts' },

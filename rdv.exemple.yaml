@@ -150,3 +150,13 @@ zones:
       - 'Notre-Commune'
   - label: 'Département'
     codePostal: '40'
+
+# -----------------------------------------------------------------------------
+#  Notifications (facultatif, aussi réglable dans Plugins → Extensions)
+# -----------------------------------------------------------------------------
+#  email : adresse prévenue à chaque rendez-vous pris en ligne (ex. celle de la
+#  conseillère). Envoi par le compte e-mail du site (Paramètres → Site →
+#  E-mails). Vide ou absent : personne n'est prévenu.
+# -----------------------------------------------------------------------------
+# notification:
+#   email: 'conseillere@exemple.fr'

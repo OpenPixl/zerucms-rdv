@@ -64,6 +64,13 @@ accepté à la lecture : `typesRenommes`, composants dans `site.ts`), champs vid
   `GET /api/rdv/beneficiaires` (`?q=<prénom nom>`), `POST /api/rdv/prendre`,
   `GET /api/rdv/ics` (`?date=&heure=&demarche=<id>`, titre `textes.nom`,
   lieu et documents recalculés côté serveur).
+- `lib/emails.ts` — e-mails (CMS ≥ 0.5.28 : `@cms/lib/email`, `@cms/lib/jeton`) :
+  notification à `notification.email` de `rdv.yaml` (réglage « Adresse à
+  prévenir », type `email`) à chaque RDV, sans bloquer la réponse ; détail du
+  RDV à la personne **sur demande** (bouton de l'écran de confirmation) :
+  `/api/rdv/prendre` renvoie `jetonEmail` (jeton signé 1 h : adresse, date,
+  heure, démarches) si un e-mail est saisi et le compte du site configuré,
+  `POST /api/rdv/email { jeton }` l'utilise une fois (410 sinon).
 - `lib/ics.ts` — événement d'agenda partagé par la route `.ics` et le QR
   code (heure Europe/Paris convertie en UTC, durée `creneaux.duree`).
 - **Module « Rendez-vous »** (`admin/`, bureau + `animateur`, déclaré par

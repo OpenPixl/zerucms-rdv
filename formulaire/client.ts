@@ -31,4 +31,5 @@ export const rdvApi = {
 	beneficiaires: (nomComplet: string) =>
 		get<BeneficiaireRecherche[]>(`/api/rdv/beneficiaires?q=${encodeURIComponent(nomComplet)}`),
 	prendre: (payload: PriseRdvPayload) => post<PriseRdvResult>('/api/rdv/prendre', payload),
+	envoyerDetail: (jeton: string) => post<{ a: string }>('/api/rdv/email', { jeton }),
 };

@@ -157,6 +157,14 @@ Questions choisies dans `profil:` de `rdv.yaml` (liste vide, ou seulement
   à apporter** (colonne `Documents`) — rappelées seulement ici.
 - **« Ajouter à mon agenda »** (.ics, titre = `textes.nom`) et **QR code** sur
   ordinateur.
+- **« M'envoyer le détail par e-mail »** (si une adresse a été saisie et que
+  le compte e-mail du site est configuré : Paramètres → Site → E-mails) :
+  envoi seulement au clic, à l'adresse saisie, une fois, dans l'heure.
+- **Notification** : à chaque RDV pris en ligne, un e-mail part à
+  `notification.email` de `rdv.yaml` (réglable dans Extensions → Prise de
+  rendez-vous → « Adresse à prévenir », ex. la conseillère) : date, heure,
+  lieu, démarche, personne et coordonnées, commentaire ; « Répondre » écrit
+  à la personne.
 
 ## Schéma Grist attendu
 
@@ -230,6 +238,13 @@ Grist, ou depuis le module « Rendez-vous » de l'Espace Admin, libère le crén
 | Chaque RDV | `RDV` | `Beneficiaire`, `Date`, `Heure`, `Lieu`, `Demarche`, `Thematiques`, `Commentaire_beneficiaire`, `Statut_rdv` = « Confirmé », `Cree_le` |
 
 ## Comment ça marche techniquement
+
+E-mails : `lib/emails.ts` (`notifierNouveauRdv()` lancé par
+`/api/rdv/prendre` sans faire attendre, `jetonDetail()` remis dans la
+réponse `jetonEmail`, `envoyerDetail()` pour `POST /api/rdv/email { jeton }`) ;
+jeton signé du CMS (`@cms/lib/jeton`, `AUTH_SECRET`), mise en forme commune
+`envoyerEmail()` (CMS ≥ 0.5.28).
+
 
 | Dossier / fichier | Contenu |
 | :--- | :--- |

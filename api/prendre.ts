@@ -4,6 +4,8 @@ import { fetchListes } from '../lib/listes';
 import { estZoneConnue } from '../lib/zones';
 import { estCreneauUrgence } from '../lib/creneaux';
 import { GristError } from '../lib/grist';
+import { demarchesParIds } from '../lib/demarches';
+import { jetonDetail, notifierNouveauRdv } from '../lib/emails';
 import { prendreRendezVous } from '../lib/reservation';
 import { isNonEmptyString, json } from '@cms/lib/http';
 import type { PriseRdvPayload } from '../lib/types';
@@ -99,7 +101,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		if (resultat.status === 'demarches_invalides') {
 			return json({ error: 'Démarche(s) inconnue(s), merci de recharger la page.' }, 400);
 		}
-		return json(resultat);
+		// Notification (ex. conseillère) sans faire attendre la personne.
+		void demarchesParIds(body.demarcheIds)
+			.catch(() => [])
+			.then((demarches) => notifierNouveauRdv(body, demarches));
+		// Bouton « M'envoyer le détail » de l'écran de confirmation, si un e-mail a été saisi.
+		const jetonEmail = await jetonDetail(body).catch(() => null);
+		return json({ ...resultat, ...(jetonEmail ? { jetonEmail } : {}) });
 	} catch (err) {
 		const status = err instanceof GristError ? err.status : 500;
 		console.error('[api/rdv/prendre]', err);
