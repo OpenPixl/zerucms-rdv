@@ -2,9 +2,10 @@
 	"id": "rdv",
 	"label": "Prise de rendez-vous",
 	"description": "Prise de rendez-vous en ligne avec un·e conseiller·ère (document Grist) : page publique, permanences dans le planning, encart d’accueil et bloc de page, module « Rendez-vous » de l’Espace Admin (réglages : src/content/rdv.yaml).",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"cms": "0.5.28",
 	"auteur": "OpenPixl",
+	"depot": "OpenPixl/zerucms-rdv",
 	"icon": "fa-calendar-check",
 	"doc": "extensions/rdv/README.md",
 	"requis": [

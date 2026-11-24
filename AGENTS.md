@@ -5,6 +5,9 @@ Imports du CMS par l'alias `@cms/…` (= `src/…` du site), sauf dans
 copie dans `extensions/rdv/` d'un site de développement, puis reporter ici ;
 publier : version dans `extension.json`, tag `vX.Y.Z` → Release avec
 l'archive (`archive.sh`, `.github/workflows/release.yml`).
+`depot` d'`extension.json` (`OpenPixl/zerucms-rdv`) : le module « Extensions »
+du CMS (≥ 0.5.29) détecte la dernière Release et propose « Mettre à jour »
+(archive `.zip` jointe obligatoire, `cms` lu dans `extension.json` au tag).
 
 Extension **générique** du CMS ZeruCMS (installée dans `extensions/rdv/` d'un site ; contrat : `docs/extensions.md` du CMS ; doc : [README.md](README.md),
 schéma Grist attendu compris) ; **aucune référence à un dispositif dans
